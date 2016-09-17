@@ -1,4 +1,8 @@
 package main;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -69,8 +73,8 @@ public class comment {
 		 long[] rs=new long[n];
 		 long length=(bound-origin)/n;
 		 for(int i=0;i<n;i++){
-			 origin+=length;
-			 long temp=nextLong(origin, bound);
+			 //origin+=length;
+			 long temp=nextLong(origin+(i*length), origin+((i+1)*length));
 			 if(i==0){
 				 rs[0]=temp;
 			 }else{
@@ -107,17 +111,41 @@ public class comment {
 	 }
 	 /**
 	  * long数组组合成字符串
+	 * @throws ParseException 
 	  * */
-	 public static String getString(long[] Arr){
+	 public static String getString(long[] Arr) throws ParseException{
 		 String rs="";
-		 if(Arr.length==1){
-			 rs=String.valueOf(Arr[0]);
+		 if(Arr.length>0){
+			 rs=getFormat(Arr[0]);
 		 }
 		 for(int i=1;i<Arr.length;i++){
 			 rs+=",";
-			 rs+=String.valueOf(Arr[i]);
+			 rs+=getFormat(Arr[i]);
 		 }
 		 return rs;
+	 }
+	 /**
+	  * yyyy-MM-dd转为long
+	 * @throws ParseException 
+	  * */
+	 public static long getCalendar(String format) throws ParseException{
+		 SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
+		 Date date=sf.parse(format);
+		 Calendar cal=Calendar.getInstance();
+		 cal.setTime(date);
+		 return cal.getTimeInMillis();
+	 }
+	 /**
+	  * long转为yyyy-MM-dd hh:mm:ss
+	 * @throws ParseException 
+	  * */
+	 public static String getFormat(long millis) throws ParseException{
+		 SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 
+		 Calendar cal=Calendar.getInstance();
+		 cal.setTimeInMillis(millis);
+		 String date=sf.format(cal.getTime());
+		 return date;
 	 }
 	 
 	 
